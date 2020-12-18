@@ -52,7 +52,7 @@ public class AAAAAAAA {
     @Around("cryptionAsp()")
     public Object around000(ProceedingJoinPoint pjp) throws Throwable {
         MethodSignature methodSignature = (MethodSignature) pjp.getSignature();
-        String originReturn;
+        Object originReturn;
         //mustn't null,cuz aspect is on it.
         Cryptable cryptable = methodSignature.getMethod().getAnnotation(Cryptable.class);
         if (cryptable.aesDec()) {
@@ -69,15 +69,21 @@ public class AAAAAAAA {
                     args[i] = realBody;
                 }
             }
-            originReturn = (String) pjp.proceed(args);
+            originReturn = pjp.proceed(args);
         } else {
-            originReturn = (String) pjp.proceed();
+            originReturn = pjp.proceed();
         }
         //若AES加密被打开（默认打开），则对返回报文进行加密
         if (cryptable.aesEnc()) {
+            String castedReturn;
+            if(originReturn instanceof String){
+                castedReturn = (String) originReturn;
+            }else{
+                castedReturn = mapper.writeValueAsString(originReturn);
+            }
             HashMap<String, String> facade = new HashMap<>(2);
             String randAES = mixinCryptor.generateAES(256);
-            String encryptedData = mixinCryptor.aesStr2StrEncrypt(originReturn, randAES);
+            String encryptedData = mixinCryptor.aesStr2StrEncrypt(castedReturn, randAES);
             facade.put(cryptable.dataIndex(), encryptedData);
             if (!cryptable.rsaPubEnc()) {
                 //表示该接口客户端未鉴真，keyindex使用明文随机AES
