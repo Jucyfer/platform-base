@@ -2,6 +2,7 @@ package cc.ejyf.platform.frameworkbase.aop.aspect;
 
 import cc.ejyf.platform.frameworkbase.aop.annotation.Cryptable;
 import cc.ejyf.platform.frameworkbase.aop.util.MixinCryptor;
+import cc.ejyf.platform.frameworkbase.env.RedisVar;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -32,16 +33,10 @@ import java.util.NoSuchElementException;
 public class AAAAAAAA {
     private Logger logger = LoggerFactory.getLogger(AAAAAAAA.class);
     private ObjectMapper mapper = new ObjectMapper();
-    @Value("{$server.encrypt.store.redis.key}")
-    private String redisEncHash;
-    @Value("{$server.encrypt.store.redis.key.pri.index}")
-    private String redisPriIndex;
-    @Value("{$server.encrypt.store.redis.token.pub.hash}")
-    private String redisTokenPubHash;
-    @Autowired
-    private StringRedisTemplate redis;
     @Autowired
     private MixinCryptor mixinCryptor;
+    @Autowired
+    private RedisVar redisVar;
 
 
     @Pointcut("@annotation(cc.ejyf.platform.frameworkbase.aop.annotation.Cryptable)")
@@ -59,7 +54,7 @@ public class AAAAAAAA {
             HashMap<String, Object> requestBodyEnc = getMethodArgByClass(pjp, HashMap.class);
             String keyData = (String) requestBodyEnc.get(cryptable.keyIndex());
             String valData = (String) requestBodyEnc.get(cryptable.dataIndex());
-            String serverPriKeyStr = redis.<String, String>boundHashOps(redisEncHash).get(redisPriIndex);
+            String serverPriKeyStr = redisVar.redis.<String, String>boundHashOps(redisVar.redisEncHash).get(redisVar.redisPriIndex);
             String key_dec = mixinCryptor.rsaStr2StrPriDecrypt(keyData, serverPriKeyStr);
             String data_dec = mixinCryptor.aesStr2StrDecrypt(valData, key_dec);
             LinkedHashMap<String, Object> realBody = mapper.readValue(data_dec, LinkedHashMap.class);
@@ -95,7 +90,7 @@ public class AAAAAAAA {
                  * 还是跟token关联，其后可能会扩展出多端同时登录的需求。一个token对应一个pub+pri。
                  */
                 String token = getMethodArgByClassAndName(pjp, String.class, "token");
-                String clientPub = redis.<String, String>boundHashOps(redisTokenPubHash).get(token);
+                String clientPub = redisVar.redis.<String, String>boundHashOps(redisVar.redisTokenPubHash).get(token);
                 facade.put(cryptable.keyIndex(), mixinCryptor.rsaStr2StrPubEncrypt(randAES, clientPub));
             }
             return mapper.writeValueAsString(facade);

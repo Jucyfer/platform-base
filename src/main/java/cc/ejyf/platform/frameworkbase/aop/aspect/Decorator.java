@@ -30,7 +30,6 @@ public class Decorator {
         LinkedHashMap<String, Object> map = new LinkedHashMap<>(3);
         MethodSignature methodSignature = (MethodSignature) pjp.getSignature();
         RequestMapping requestMapping =methodSignature.getMethod().getDeclaredAnnotation(RequestMapping.class);
-        System.out.println(Arrays.stream(requestMapping.method()).anyMatch(e->e==RequestMethod.POST));
         Object o;
         try {
             o = pjp.proceed();

@@ -1,6 +1,7 @@
 package cc.ejyf.platform.frameworkbase.demo.controller.task;
 
 import cc.ejyf.platform.frameworkbase.aop.util.MixinCryptor;
+import cc.ejyf.platform.frameworkbase.env.RedisVar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -14,24 +15,16 @@ public class OnBootTask implements CommandLineRunner {
     @Autowired
     MixinCryptor cryptor;
     @Autowired
-    StringRedisTemplate template;
+    private RedisVar redisVar;
 
-    @Value("{$server.encrypt.store.redis.key}")
-    private String redisEncHash;
-    @Value("{$server.encrypt.store.redis.key.pub.index}")
-    private String redisPubIndex;
-    @Value("{$server.encrypt.store.redis.key.pri.index}")
-    private String redisPriIndex;
-    @Value("{$server.encrypt.store.redis.key.sec.index}")
-    private String redisSecIndex;
 
     @Override
     public void run(String... args) throws Exception {
         var map = cryptor.generateRSA(512);
         var aes = cryptor.generateAES(256);
-        template.<String,String>boundHashOps(redisEncHash).put(redisPubIndex, map.get("public"));
-        template.<String,String>boundHashOps(redisEncHash).put(redisPriIndex, map.get("private"));
-        template.<String,String>boundHashOps(redisEncHash).put(redisSecIndex, aes);
+        redisVar.redis.<String,String>boundHashOps(redisVar.redisEncHash).put(redisVar.redisPubIndex, map.get("public"));
+        redisVar.redis.<String,String>boundHashOps(redisVar.redisEncHash).put(redisVar.redisPriIndex, map.get("private"));
+        redisVar.redis.<String,String>boundHashOps(redisVar.redisEncHash).put(redisVar.redisSecIndex, aes);
         System.out.println("keygen done.");
     }
 }
