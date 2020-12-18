@@ -2,7 +2,7 @@ package cc.ejyf.platform.frameworkbase.demo.controller;
 
 import cc.ejyf.platform.frameworkbase.aop.annotation.Cryptable;
 import cc.ejyf.platform.frameworkbase.aop.annotation.Decorate;
-import cc.ejyf.platform.frameworkbase.aop.util.MixinCryptor;
+import cc.ejyf.platform.frameworkbase.util.MixinCryptor;
 import cc.ejyf.platform.frameworkbase.env.RedisVar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

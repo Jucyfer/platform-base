@@ -1,4 +1,4 @@
-package cc.ejyf.platform.frameworkbase.aop.util;
+package cc.ejyf.platform.frameworkbase.util;
 
 import org.springframework.stereotype.Component;
 

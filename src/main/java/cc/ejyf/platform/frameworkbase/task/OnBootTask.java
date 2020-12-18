@@ -1,12 +1,10 @@
-package cc.ejyf.platform.frameworkbase.demo.controller.task;
+package cc.ejyf.platform.frameworkbase.task;
 
-import cc.ejyf.platform.frameworkbase.aop.util.MixinCryptor;
+import cc.ejyf.platform.frameworkbase.util.MixinCryptor;
 import cc.ejyf.platform.frameworkbase.env.RedisVar;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 @Order(1)

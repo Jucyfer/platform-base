@@ -1,7 +1,7 @@
 package cc.ejyf.platform.frameworkbase.aop.aspect;
 
 import cc.ejyf.platform.frameworkbase.aop.annotation.Cryptable;
-import cc.ejyf.platform.frameworkbase.aop.util.MixinCryptor;
+import cc.ejyf.platform.frameworkbase.util.MixinCryptor;
 import cc.ejyf.platform.frameworkbase.env.RedisVar;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.aspectj.lang.JoinPoint;
@@ -13,9 +13,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
