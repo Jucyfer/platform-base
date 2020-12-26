@@ -22,7 +22,6 @@ public class DemoController {
     private MixinCryptor cryptor;
 
     @CrossOrigin
-//    @Crypt(aesDec = false, rsaPubEnc = false)
     @Crypt(hasBody = false, encryptMode = EncryptMode.AES_R_PLAIN)
     @Decorate
     @GetMapping("/getpub")

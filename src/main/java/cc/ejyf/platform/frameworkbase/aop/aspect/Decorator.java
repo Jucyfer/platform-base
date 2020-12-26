@@ -41,13 +41,13 @@ public class Decorator {
             map.put("msg", "success");
             map.put("data", o);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("ERR OCCURRED",e);
             //一个简单的处理方式，可以根据需要，映射成具体的响应代码和错误原因。
             String exceptionName = e.getClass().getSimpleName();//just example
-            String i18nName = exceptionName.trim();//just example
-            String errCode = exceptionName.trim();//just example
+            String errMsg = exceptionName.trim();//just example, should be mapped
+            String errCode = exceptionName.trim();//just example, should be mapped
             map.put("code", errCode);
-            map.put("msg", i18nName);
+            map.put("msg", errMsg);
             map.put("data", Objects.requireNonNullElse(e.getMessage(), "internal error."));
         }
 //        map.put("timestamp", redisVar.redis.boundValueOps(redisVar.clockKey).get());
