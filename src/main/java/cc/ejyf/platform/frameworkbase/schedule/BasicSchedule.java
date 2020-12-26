@@ -15,7 +15,7 @@ public class BasicSchedule {
     private RedisVar redisVar;
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
 
-    @Scheduled(cron = "* * * * * ?")
+//    @Scheduled(cron = "* * * * * ?")
     public void cacheTime() {
         redisVar.redis.boundValueOps(redisVar.clockKey)
                 .set(
